@@ -1,5 +1,5 @@
-import { Component, OnInit } from "@angular/core";
-import { FormControl, FormGroup, Validators } from "@angular/forms";
+import { Component, OnDestroy, OnInit } from "@angular/core";
+import { FormArray, FormControl, FormGroup, Validators } from "@angular/forms";
 
 @Component({
   selector: "app-root",
@@ -20,13 +20,15 @@ export class AppComponent implements OnInit {
         Validators.required,
         Validators.minLength(6),
       ]),
+
       //При добававлении подгрупп в группу необходимо найти корневой контейнер подгруппы
       //и написать в нем formGroupName="имя подгруппы"
       //имя подгруппы: new FormFroup(форм контролы)
       address: new FormGroup({
-        country: new FormControl("ua", []),
-        city: new FormControl("", [])
+        country: new FormControl("ru", []),
+        city: new FormControl("", []),
       }),
+      skills: new FormArray([]),
     });
   }
 
@@ -35,9 +37,34 @@ export class AppComponent implements OnInit {
   submit() {
     if (this.form.valid) {
       console.log("form submit: ", this.form);
-      const formData = { ...this.form.value };
-      console.log(formData.email, formData.password);
+      //const formData = { ...this.form.value };
+      //console.log(formData.email, formData.password);
+      console.log(
+        this.form.get("password").value,
+        this.form.get("email").value,
+        this.form.get("address").get("country").value
+      );
     }
+  }
+
+  onCountry() {
+    const cityMap = {
+      ru: "Москва",
+      ua: "Киев",
+      by: "Минск",
+    };
+
+    console.log(cityMap[this.form.get("address").get("country").value]);
+    const city = cityMap[this.form.get("address").get("country").value];
+    this.form.patchValue({
+      address: { city: city },
+    });
+  }
+ 
+  addSkill() {
+    const control = new FormControl("", [Validators.required]);
+    //(<FormArray>this.form.get("skills")).push(control);  //способ 1 - кастить типы, на следующей строке способ 2
+    ((this.form.get("skills")) as FormArray).push(control);
   }
 }
 

@@ -15,6 +15,7 @@
       <label>Пароль</label>
       <input type="password" placeholder="Пароль" formControlName="password">
       
+      <pre>{{form.get('password').errors | json }}</pre>
       <!-- form.get('имя форма контрола').флагВалидатора -->
 
       <div class="validation" *ngIf="form.get('password').invalid && form.get('password').touched">
@@ -46,15 +47,16 @@
         <input type="text" formControlName="city" placeholder="Город">
       </div>
 
-      <button class="btn" type="button">Выбрать столицу</button>
+      <button class="btn" type="button" (click)="onCountry()">Выбрать столицу</button>
     </div>
 
-    <div class="card">
+    <div class="card" formGroupName="skills">
       <h2>Ваши навыки</h2>
-      <button class="btn" type="button">Добавить умение</button>
-      <div class="form-control">
-        <label></label>
-        <input type="text">
+      <button class="btn" type="button" (click)="addSkill()">Добавить умение</button>
+      <div class="form-control" *ngFor='let control of form.get("skills").controls; let i=index'>
+
+        <label>Умение {{i+1}}</label>
+        <input type="text" [formControlName]="i">
       </div>
     </div>
 
