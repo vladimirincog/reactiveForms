@@ -1,3 +1,4 @@
+import { MyValidators } from "./my.validators";
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { FormArray, FormControl, FormGroup, Validators } from "@angular/forms";
 
@@ -15,7 +16,11 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.form = new FormGroup({
-      email: new FormControl("", [Validators.required, Validators.email]),
+      email: new FormControl(
+        "",
+        [Validators.required, Validators.email, MyValidators.restrictedEmails],
+        MyValidators.uniqEmail
+      ),
       password: new FormControl("", [
         Validators.required,
         Validators.minLength(6),
@@ -44,6 +49,7 @@ export class AppComponent implements OnInit {
         this.form.get("email").value,
         this.form.get("address").get("country").value
       );
+      this.form.reset();
     }
   }
 
@@ -60,11 +66,11 @@ export class AppComponent implements OnInit {
       address: { city: city },
     });
   }
- 
+
   addSkill() {
     const control = new FormControl("", [Validators.required]);
     //(<FormArray>this.form.get("skills")).push(control);  //способ 1 - кастить типы, на следующей строке способ 2
-    ((this.form.get("skills")) as FormArray).push(control);
+    (this.form.get("skills") as FormArray).push(control);
   }
 }
 

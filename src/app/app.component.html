@@ -8,6 +8,9 @@
       <div class="validation" *ngIf="form.get('email').invalid && form.get('email').touched">
         <small *ngIf="form.get('email').errors.required">Поле email не может быть пустым</small>
         <small *ngIf="form.get('email').errors.email">Введите коректный email</small>
+        <small *ngIf="form.get('email').errors.restrictedEmail">email занят</small>
+        <small *ngIf="form.get('email').errors.pending">Идет асинхронный запрос для проверки Email</small>
+        <small *ngIf="form.get('email').errors.uniqEmail">email проверился асинхронно и он к сожалению занят</small>
       </div>
     </div>
     
